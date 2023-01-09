@@ -59,6 +59,8 @@ public class ServiceUptimeApp {
 }
 
 code that store the URLs entered by users in a MongoDB database using the Java MongoDB Driver:
+
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -99,8 +101,9 @@ public class Database {
 }
 
 code that simple user interface (UI) for your service uptime app using JavaScript and the React library:
-import React, { useState, useEffect } from "react";
 
+
+import React, { useState, useEffect } from "react";
 function App() {
   const [urls, setUrls] = useState([]);
   const [status, setStatus] = useState({});
