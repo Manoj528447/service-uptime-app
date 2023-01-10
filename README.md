@@ -100,33 +100,14 @@ public class Database {
     }
 }
 
-code that simple user interface (UI) for your service uptime app using JavaScript and the React library:
+code that simple user interface (UI) for your service uptime app using Angular JS:
 
+import { Component, OnInit } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import React, { useState, useEffect } from "react";
-function App() {
-  const [urls, setUrls] = useState([]);
-  const [status, setStatus] = useState({});
-
-  useEffect(() => {
-    // Fetch the list of URLs from the server
-    fetch("/api/urls")
-      .then(response => response.json())
-      .then(data => setUrls(data.urls));
-
-    // Periodically fetch the status of each URL
-    const interval = setInterval(() => {
-      fetch("/api/status")
-        .then(response => response.json())
-        .then(data => setStatus(data.status));
-    }, 5000);
-
-    // Clear the interval when the component unmounts
-    return () => clearInterval(interval);
-  }, []);
-
-  // Render a table showing the status of each URL
-  return (
+@Component({
+  selector: "app-root",
+  template: `
     <table>
       <thead>
         <tr>
@@ -135,15 +116,27 @@ function App() {
         </tr>
       </thead>
       <tbody>
-        {urls.map(url => (
-          <tr key={url}>
-            <td>{url}</td>
-            <td>{status[url] || "PENDING"}</td>
-          </tr>
-        ))}
+        <tr *ngFor="let url of urls">
+          <td>{{ url }}</td>
+          <td>{{ status[url] || "PENDING" }}</td>
+        </tr>
       </tbody>
     </table>
-  );
-}
+  `
+})
+export class AppComponent implements OnInit {
+  urls: string[] = [];
+  status = {};
 
-export default App;
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    // Fetch the list of URLs from the server
+    this.http.get("/api/urls").subscribe(data => (this.urls = data.urls));
+
+    // Periodically fetch the status of each URL
+    setInterval(() => {
+      this.http.get("/api/status").subscribe(data => (this.status = data.status));
+    }, 5000);
+  }
+}
